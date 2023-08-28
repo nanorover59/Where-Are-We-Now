@@ -1,0 +1,31 @@
+{
+	"schemaVersion": 1,
+	"id": "wawn",
+	"version": "1.0.0",
+	"name": "Where Are We Now?",
+	"description": "View all players on the map like the legacy console edition.",
+	"authors": [
+		"nanorover59"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "MIT License",
+	"icon": "assets/modid/icon.png",
+	"environment": "client",
+	"entrypoints": {},
+	"mixins": [
+		"wawn.mixin.common.json",
+		"wawn.mixin.client.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
