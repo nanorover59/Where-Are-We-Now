@@ -1,9 +1,2 @@
-# Fabric Example Mod
-
-## Setup
-
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+# Where Are We Now?
+A simple mod that changes the map item to always show player icons similar to the legacy console edition. Also renders player icons with a color to match their team and removes framed map icons. The name of this mod is something of music disc trivia. :)
