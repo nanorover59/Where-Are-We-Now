@@ -3,27 +3,29 @@
 	"id": "wawn",
 	"version": "1.0.0",
 	"name": "Where Are We Now?",
-	"description": "View all players on the map like the legacy console edition.",
+	"description": "View all players with their team color on the map.",
 	"authors": [
 		"nanorover59"
 	],
 	"contact": {
-		"homepage": "",
-		"sources": ""
+		"homepage": "https://curseforge.com/minecraft/mc-mods/where-are-we-now",
+		"sources": "https://github.com/nanorover59/Where-Are-We-Now"
 	},
 	"license": "MIT License",
-	"icon": "assets/modid/icon.png",
-	"environment": "client",
+	"icon": "assets/wawn/icon.png",
+	"environment": "*",
 	"entrypoints": {},
 	"mixins": [
 		"wawn.mixin.common.json",
-		"wawn.mixin.client.json"
+		{
+			"config": "wawn.mixin.client.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.14.21",
-		"minecraft": "~1.20.1",
-		"java": ">=17",
-		"fabric-api": "*"
+		"minecraft": "~1.20",
+		"java": ">=17"
 	},
 	"suggests": {
 		"another-mod": "*"

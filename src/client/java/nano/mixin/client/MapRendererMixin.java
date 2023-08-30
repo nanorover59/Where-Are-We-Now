@@ -68,7 +68,7 @@ public class MapRendererMixin
 			float e2 = (float) (iconType / 16 + 0) / 16.0f;
 			float e3 = (float) (iconType % 16 + 1) / 16.0f;
 			float e4 = (float) (iconType / 16 + 1) / 16.0f;
-			int color = Integer.valueOf(mapIcon.getText().getString());
+			int color = mapIcon.getText() != null ? Integer.valueOf(mapIcon.getText().getString()) : 0xFFFFFF;
 			int r = ColorHelper.Argb.getRed(color);
 			int b = ColorHelper.Argb.getBlue(color);
 			int g = ColorHelper.Argb.getGreen(color);
