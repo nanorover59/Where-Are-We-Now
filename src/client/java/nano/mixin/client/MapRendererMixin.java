@@ -60,15 +60,15 @@ public class MapRendererMixin
 				continue;
 
 			matrices.push();
-			matrices.translate(0.0f + (float) mapIcon.getX() / 2.0f + 64.0f, 0.0f + (float) mapIcon.getZ() / 2.0f + 64.0f, -0.02f);
-			matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) (mapIcon.getRotation() * 360) / 16.0f));
+			matrices.translate(0.0f + (float) mapIcon.x() / 2.0f + 64.0f, 0.0f + (float) mapIcon.z() / 2.0f + 64.0f, -0.02f);
+			matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) (mapIcon.rotation() * 360) / 16.0f));
 			matrices.scale(4.0f, 4.0f, 3.0f);
 			matrices.translate(-0.125f, 0.125f, 0.0f);
 			float e1 = (float) (iconType % 16 + 0) / 16.0f;
 			float e2 = (float) (iconType / 16 + 0) / 16.0f;
 			float e3 = (float) (iconType % 16 + 1) / 16.0f;
 			float e4 = (float) (iconType / 16 + 1) / 16.0f;
-			int color = mapIcon.getText() != null ? Integer.valueOf(mapIcon.getText().getString()) : 0xFFFFFF;
+			int color = mapIcon.text() != null ? Integer.valueOf(mapIcon.text().getString()) : 0xFFFFFF;
 			int r = ColorHelper.Argb.getRed(color);
 			int b = ColorHelper.Argb.getBlue(color);
 			int g = ColorHelper.Argb.getGreen(color);
