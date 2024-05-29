@@ -1,6 +1,7 @@
 package nano.mixin.common;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,8 +26,8 @@ public class MapStateMixin
 	/**
 	 * Do not remove any player icons.
 	 */
-	@Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;contains(Lnet/minecraft/item/ItemStack;)Z"))
-	private boolean containsRedirect(PlayerInventory inventory, ItemStack stack)
+	@Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;contains(Ljava/util/function/Predicate;)Z"))
+	private boolean containsRedirect(PlayerInventory inventory, Predicate<ItemStack> predicate)
 	{
 		return true;
 	}
@@ -43,7 +44,7 @@ public class MapStateMixin
 	/**
 	 * Embed team color information in the text field.
 	 */
-	@ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;addIcon(Lnet/minecraft/item/map/MapIcon$Type;Lnet/minecraft/world/WorldAccess;Ljava/lang/String;DDDLnet/minecraft/text/Text;)V", ordinal = 0))
+	@ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;addDecoration(Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/world/WorldAccess;Ljava/lang/String;DDDLnet/minecraft/text/Text;)V", ordinal = 0))
 	private void addIconModifyArgs(Args args)
 	{
 		String name = args.get(2);

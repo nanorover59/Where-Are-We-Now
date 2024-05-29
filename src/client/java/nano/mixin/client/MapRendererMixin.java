@@ -10,13 +10,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.map.MapIcon;
+import net.minecraft.item.map.MapDecoration;
+import net.minecraft.item.map.MapDecorationType;
+import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
-import net.minecraft.util.Identifier;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.RotationAxis;
 
@@ -41,43 +45,45 @@ public class MapRendererMixin
 	@Inject(method = "draw", at = @At(value = "TAIL"))
 	private void drawInject(MatrixStack matrices, VertexConsumerProvider vertexConsumers, boolean hidePlayerIcons, int light, CallbackInfo info)
 	{
+		MinecraftClient client = MinecraftClient.getInstance();
 		int layer = 0;
 		
 		// Ensure player icons are drawn on top of other icons.
-		for(MapIcon mapIcon : state.getIcons())
+		for(MapDecoration mapDecoration : state.getDecorations())
 		{
-			byte iconType = mapIcon.getTypeId();
+			RegistryEntry<MapDecorationType> decorationType = mapDecoration.type();
 			
-			if(iconType != 0 && iconType != 6 && iconType != 7)
+			if(decorationType != MapDecorationTypes.PLAYER && decorationType != MapDecorationTypes.PLAYER_OFF_LIMITS && decorationType != MapDecorationTypes.PLAYER_OFF_MAP)
 				layer++;
 		}
 		
-		for(MapIcon mapIcon : state.getIcons())
+		for(MapDecoration mapDecoration : state.getDecorations())
 		{
-			byte iconType = mapIcon.getTypeId();
+			RegistryEntry<MapDecorationType> decorationType = mapDecoration.type();
 
-			if(iconType != 0 && iconType != 6 && iconType != 7)
+			if(decorationType != MapDecorationTypes.PLAYER && decorationType != MapDecorationTypes.PLAYER_OFF_LIMITS && decorationType != MapDecorationTypes.PLAYER_OFF_MAP)
 				continue;
 
 			matrices.push();
-			matrices.translate(0.0f + (float) mapIcon.x() / 2.0f + 64.0f, 0.0f + (float) mapIcon.z() / 2.0f + 64.0f, -0.02f);
-			matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) (mapIcon.rotation() * 360) / 16.0f));
+			matrices.translate(0.0f + (float) mapDecoration.x() / 2.0f + 64.0f, 0.0f + (float) mapDecoration.z() / 2.0f + 64.0f, -0.02f);
+			matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((float) (mapDecoration.rotation() * 360) / 16.0f));
 			matrices.scale(4.0f, 4.0f, 3.0f);
 			matrices.translate(-0.125f, 0.125f, 0.0f);
-			float e1 = (float) (iconType % 16 + 0) / 16.0f;
-			float e2 = (float) (iconType / 16 + 0) / 16.0f;
-			float e3 = (float) (iconType % 16 + 1) / 16.0f;
-			float e4 = (float) (iconType / 16 + 1) / 16.0f;
-			int color = mapIcon.text() != null ? Integer.valueOf(mapIcon.text().getString()) : 0xFFFFFF;
+			Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(mapDecoration);
+            float minU = sprite.getMinU();
+            float minV = sprite.getMinV();
+            float maxU = sprite.getMaxU();
+            float maxV = sprite.getMaxV();
+			int color = mapDecoration.name().get() != null ? Integer.valueOf(mapDecoration.name().get().getString()) : 0xFFFFFF;
 			int r = ColorHelper.Argb.getRed(color);
 			int b = ColorHelper.Argb.getBlue(color);
 			int g = ColorHelper.Argb.getGreen(color);
 			Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
-			VertexConsumer vertexConsumer2 = vertexConsumers.getBuffer(RenderLayer.getText(new Identifier("textures/map/map_icons.png")));
-			vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(e1, e2).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(e3, e2).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(e3, e4).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(e1, e4).light(light).next();
+			VertexConsumer vertexConsumer2 = vertexConsumers.getBuffer(RenderLayer.getText(sprite.getAtlasId()));
+			vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, minV).light(light).next();
+			vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, minV).light(light).next();
+			vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, maxV).light(light).next();
+			vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, maxV).light(light).next();
 			matrices.pop();
 			layer++;
 		}
