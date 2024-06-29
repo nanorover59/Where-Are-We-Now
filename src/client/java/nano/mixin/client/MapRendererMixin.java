@@ -80,10 +80,10 @@ public class MapRendererMixin
 			int g = ColorHelper.Argb.getGreen(color);
 			Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
 			VertexConsumer vertexConsumer2 = vertexConsumers.getBuffer(RenderLayer.getText(sprite.getAtlasId()));
-			vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, minV).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, minV).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, maxV).light(light).next();
-			vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, maxV).light(light).next();
+			vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, minV).light(light);
+			vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, minV).light(light);
+			vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(maxU, maxV).light(light);
+			vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, (float) layer * -0.001f).color(r, g, b, 255).texture(minU, maxV).light(light);
 			matrices.pop();
 			layer++;
 		}
