@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "wawn",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"name": "Where Are We Now?",
 	"description": "View all players with their team color on the map.",
 	"authors": [
@@ -23,8 +23,8 @@
 		}
 	],
 	"depends": {
-		"fabricloader": ">=0.15.11",
-		"minecraft": "~1.21",
+		"fabricloader": ">=0.16.14",
+		"minecraft": "1.21.8",
 		"java": ">=21"
 	},
 	"suggests": {
